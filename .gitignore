@@ -28,3 +28,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 PONG/Library/
+PONG/Temp/
