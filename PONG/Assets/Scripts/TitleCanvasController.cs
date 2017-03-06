@@ -1,16 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TitleCanvasController : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
 	
-	// Update is called once per frame
-	void Update () {
-		
+	private Scene gameScene = SceneManager.GetSceneByName("Game");
+
+	/// <summary>ボタンをクリックした際に呼ばれるイベント
+	/// ゲームシーンをロードする
+	/// </summary>
+	private void OnClick()
+	{
+		if (gameScene != null) {
+			SceneManager.LoadScene (gameScene.buildIndex);
+		}
 	}
+
 }
