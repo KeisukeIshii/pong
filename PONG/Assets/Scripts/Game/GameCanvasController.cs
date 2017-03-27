@@ -10,6 +10,7 @@ public class GameCanvasController : MonoBehaviour,IGameStep
 	private const float GAME_MAX_TIME = 90.0f;
 	private const string PAUSE_TEXT = "STOP";
 	private const string DRAW_TEXT = "DRAW"; 
+	private const string READY_TEXT = "READY"; 
 	private const string RESULT_TEXT_FORMAT = "{0}\nWINNER!"; 
 	private const string TIME_TEXT_FORMAT = "{0}:{1}"; 
 
@@ -106,8 +107,11 @@ public class GameCanvasController : MonoBehaviour,IGameStep
 
 	public void OnStart()
 	{
-		this.canPause = true;
-		this.step = Step.Playing;
+		this.statusText.text = READY_TEXT;
+		this.doNextStep = false;
+		this.step = Step.Wait;
+		this.canPause = false;
+		this.gameObject.GetComponent<Animator> ().SetTrigger ("Ready");
 	}
 
 	public void OnPlaying ()
@@ -223,6 +227,17 @@ public class GameCanvasController : MonoBehaviour,IGameStep
 				OnPause ();
 			}
 		}
+	}
+
+	#endregion
+
+	#region Animation
+
+	public void Ready()
+	{
+		this.canPause = true;
+		this.step = Step.Playing;
+		this.doNextStep = true;
 	}
 
 	#endregion
