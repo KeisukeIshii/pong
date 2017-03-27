@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Boll : MonoBehaviour {
 
-	public const float MOVE_SPEED = 1.0f;
-	public const float MOVE_SPEED_OFFSET = 0.1f;
-	private const string PREFAB_PATH = "Prefabs/Game/Boll";
-	private readonly Vector2 FIRST_POSITION = new Vector2(0.0f,-20.0f);
+	public const float MOVE_SPEED = 100f;
+	public const float MOVE_SPEED_OFFSET = 20f;
+	private const string PREFAB_PATH = "Prefabs/Boll";
+	private readonly Vector2 FIRST_POSITION = new Vector2(0.0f,20.0f);
 
 	[SerializeField]
 	private RectTransform rectTrans = null; 
@@ -15,10 +15,9 @@ public class Boll : MonoBehaviour {
 	//移動速度
 	private float deltaX = 0;
 	private float deltaY = 0;
-	private GameCanvasController controller = null;
 
 	/// <summary>
-	/// 初期化.x
+	/// 初期化
 	/// </summary>
 	public void Initialize()
 	{
@@ -26,16 +25,7 @@ public class Boll : MonoBehaviour {
 		//X方向には必ず動く必要あり
 		deltaX = GetInitSpeed(MOVE_SPEED_OFFSET);
 		//Y方向は関係なし
-		deltaX = GetInitSpeed();
-	}
-
-	/// <summary>
-	/// コントローラの参照を保持
-	/// </summary>
-	/// <param name="coltroller">Coltroller.</param>
-	public void SetController(GameCanvasController controller)
-	{
-		this.controller = controller;
+		deltaY = GetInitSpeed(MOVE_SPEED/2.0f);
 	}
 
 	/// <summary>
@@ -51,7 +41,8 @@ public class Boll : MonoBehaviour {
 
 	public static Boll Create()
 	{
-		Boll boll = Instantiate (Resources.Load<Boll> (PREFAB_PATH));
+		GameObject　instance = Instantiate(Resources.Load(PREFAB_PATH)) as GameObject;
+		Boll boll = instance.GetComponent<Boll> ();
 		return boll;
 	}
 
@@ -68,7 +59,8 @@ public class Boll : MonoBehaviour {
 	/// <returns>The dict.</returns>
 	private float GetDict()
 	{
-		return (float)(Random.Range (0, 1) == 0 ? -1 : 1);
+		float dict = (float)(Random.Range (0, 2) == 0 ? -1 : 1);
+		return dict;
 	}
 
 	/// <summary>
@@ -95,14 +87,15 @@ public class Boll : MonoBehaviour {
 
 	#region あたり判定(Collider2Dから呼ばれる)
 
-	void OnCollsionEnter2D(Collision2D coll)
+	void OnCollisionEnter2D(Collision2D coll)
 	{
+		//Debug.Log ("Collison");
 		switch (coll.gameObject.tag) {
 		case "Player":
-			this.Refrect (this.deltaX);
+			this.deltaX = this.Refrect (this.deltaX) * 1.05f;
 			break;
 		case "WallHorizontal":
-			this.Refrect (this.deltaY);
+			this.deltaY = this.Refrect (this.deltaY);
 			break;
 		case "DeadWall":
 			coll.gameObject.GetComponent<DeadWall> ().AddCount ();

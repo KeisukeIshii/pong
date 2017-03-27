@@ -11,6 +11,7 @@ public class DeadWall : MonoBehaviour {
 
 	public void AddCount()
 	{
-
+		player.count++;
+		controller.OnAddCount ();
 	}
 }
