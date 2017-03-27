@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Boll : MonoBehaviour {
 
-	public const float MOVE_SPEED = 100f;
-	public const float MOVE_SPEED_OFFSET = 20f;
+	public const float MOVE_SPEED = 150f;
+	public const float MOVE_SPEED_OFFSET = 50f;
 	private const string PREFAB_PATH = "Prefabs/Boll";
 	private readonly Vector2 FIRST_POSITION = new Vector2(0.0f,20.0f);
 

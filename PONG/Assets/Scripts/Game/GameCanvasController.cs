@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameCanvasController : MonoBehaviour,IGameStep
 {
 	private const int WIN_POINT = 11;
-	private const float GAME_MAX_TIME = 60.0f;
+	private const float GAME_MAX_TIME = 90.0f;
 	private const string PAUSE_TEXT = "STOP";
 	private const string DRAW_TEXT = "DRAW"; 
 	private const string RESULT_TEXT_FORMAT = "{0}\nWINNER!"; 
@@ -42,6 +42,11 @@ public class GameCanvasController : MonoBehaviour,IGameStep
 	Text player2Count;
 	[SerializeField]
 	Text statusText;
+	[SerializeField]
+	Button buttonTop;
+	[SerializeField]
+	Button buttonReset;
+
 
 	private Boll boll = null;
 	private Step step = Step.Init;
@@ -114,11 +119,11 @@ public class GameCanvasController : MonoBehaviour,IGameStep
 		this.player1Count.text = this.player1.count.ToString();
 		this.player2Count.text = this.player2.count.ToString();
 
-		int timeSec = (int)this.gameTime;
-		float decimalTime = this.gameTime - (float)timeSec;
+		float timeMinutue = (int)(this.gameTime/60.0f);
+		int timeSec = (int)this.gameTime %60;
 		this.time.text = string.Format(TIME_TEXT_FORMAT,
-			timeSec,
-			decimalTime.ToString().PadLeft(4,'0').Substring(2,2));
+			timeMinutue,
+			timeSec.ToString().PadLeft(2,'0'));
 	}
 
 	public void OnPause()
@@ -128,6 +133,10 @@ public class GameCanvasController : MonoBehaviour,IGameStep
 		this.isPause = true;
 		this.statusText.text = PAUSE_TEXT;
 		this.statusText.gameObject.transform.parent.gameObject.SetActive (true);
+		this.buttonTop.enabled = false;
+		this.buttonReset.enabled = false;
+		this.buttonTop.image.color = Color.gray;
+		this.buttonReset.image.color = Color.gray;
 	}
 
 	public void OnGameSet ()
@@ -163,6 +172,10 @@ public class GameCanvasController : MonoBehaviour,IGameStep
 		this.statusText.gameObject.transform.parent.gameObject.SetActive (false);
 		this.step = Step.Playing;
 		this.isPause = false;
+		this.buttonTop.enabled = true;
+		this.buttonReset.enabled = true;
+		this.buttonTop.image.color = Color.blue;
+		this.buttonReset.image.color = Color.blue;
 	}
 
 	/// <summary>
