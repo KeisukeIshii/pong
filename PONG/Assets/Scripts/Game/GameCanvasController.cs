@@ -64,7 +64,6 @@ public class GameCanvasController : MonoBehaviour,IGameStep
 	void Update ()
 	{
 		StateMacine ();
-		TimeUpdate ();
 	}
 
 	/// <summary>
@@ -102,6 +101,11 @@ public class GameCanvasController : MonoBehaviour,IGameStep
 		this.doNextStep = true;
 		this.step = Step.Start;
 		this.gameTime = GAME_MAX_TIME;
+		float timeMinutue = (int)(this.gameTime/60.0f);
+		int timeSec = (int)this.gameTime %60;
+		this.time.text = string.Format(TIME_TEXT_FORMAT,
+			timeMinutue,
+			timeSec.ToString().PadLeft(2,'0'));
 		this.statusText.gameObject.transform.parent.gameObject.SetActive (false);
 	}
 
@@ -112,6 +116,7 @@ public class GameCanvasController : MonoBehaviour,IGameStep
 		this.step = Step.Wait;
 		this.canPause = false;
 		this.gameObject.GetComponent<Animator> ().SetTrigger ("Ready");
+		this.statusText.gameObject.transform.parent.gameObject.SetActive (true);
 	}
 
 	public void OnPlaying ()
@@ -128,6 +133,7 @@ public class GameCanvasController : MonoBehaviour,IGameStep
 		this.time.text = string.Format(TIME_TEXT_FORMAT,
 			timeMinutue,
 			timeSec.ToString().PadLeft(2,'0'));
+		TimeUpdate ();
 	}
 
 	public void OnPause()
@@ -238,6 +244,7 @@ public class GameCanvasController : MonoBehaviour,IGameStep
 		this.canPause = true;
 		this.step = Step.Playing;
 		this.doNextStep = true;
+		this.statusText.gameObject.transform.parent.gameObject.SetActive (false);
 	}
 
 	#endregion
